@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+
+<!-- S head -->
+<!-- <head>：这是 <html> 元素内的子元素，用于包含文档的元数据，比如字符编码声明、标题和外部样式表等。通常不会在网页中直接显示。-->
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="PoseCrafter: One-Shot Personalized Video Synthesis Following Flexible Pose Control">
+  <meta name="keywords" content="Personalized Video Generation, Pose Guidance, One-Shot, Diffusion Models">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PoseCrafter: One-Shot Personalized Video Synthesis Following Flexible Pose Control</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<!-- E head -->
+
+<!-- S body 网页主体 -->
+<body>
+
+<!-- S nav 导航 -->
+<!--
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+-->
+<!-- E nav 导航 -->
+
+<!-- S 标题 -->
+<!-- <section class="hero"> 是将 <section> 元素与 CSS 类名 "hero" 关联起来的表示方式。
+  类名 "hero" 可能表示该 <section> 元素是一个英雄区块，通常用于展示页面的引人注目的内容或重要信息。
+  通过使用类名，可以将样式和行为与特定的 <section> 元素关联起来，使其具有独特的外观和功能。
+  为了使类名有效，需要在 CSS 文件中定义相应的样式规则。-->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <!-- 标题 -->
+          <h1 class="title is-1 publication-title">PoseCrafter: One-Shot Personalized Video Synthesis Following Flexible Poses</h1>
+          <!-- 作者 -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Yong Zhong*</a><sup>1</sup>,</span>
+            <span class="author-block">
+              Min Zhao*</a><sup>1</sup>,</span>
+            <span class="author-block">
+              Zebin You</a><sup>1</sup>,</span>
+              <span class="author-block">
+                Xiaofeng Yu</a><sup>2</sup>,</span>
+                <span class="author-block">
+                  Changwang Zhang</a><sup>2</sup>,</span>
+            <span class="author-block">
+              Chongxuan Li</a><sup>**1</sup>,
+            </span>
+          </div>
+          <!-- 作者单位 -->
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Gaoling School of Artificial Intelligence, Renmin University of China, Beijing, China</span>
+            <span class="author-block"><sup>2</sup>Huawei Technologies Co., Ltd</span>
+          </div>
+
+          <!-- 链接按钮 -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <!-- <span> 元素用于对文档中的短小文本片段进行标记和包装 -->
+              <!-- <span class="link-block">
+                <a href="https://arxiv.org/pdf/2305.17098.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span> -->
+              <!-- arXiv Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2405.14582"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <!-- <span class="link-block">
+                <a href="https://github.com/thu-ml/controlvideo"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span> -->
+              <!-- Video Link. -->
+              <!--
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              -->
+              <!-- Demo Link. -->
+              <!--
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fa fa-paint-brush"></i>
+                  </span>
+                  <span>Demo</span>
+                  </a>
+              </span>
+              -->
+              <!-- Dataset Link. -->
+              <!--
+              <span class="link-block">
+                <a href="https://github.com/google/nerfies/releases/tag/0.1"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+              </span>
+              -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- E 标题 -->
+
+<!-- S 预告片 -->
+<!--
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" controls height="100%">
+        <source src="./static/videos/submit_demo_crop.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">ControlVideo</span> fine-grained and controllable video editing
+      </h2>
+    </div>
+  </div>
+</section>
+-->
+<!-- E 预告片 -->
+
+<!--  -->
+<!--
+<h2 class="subtitle has-text-centered">
+  <span class="dnerf">ControlVideo</span> fine-grained and controllable video editing
+</h2>
+-->
+<!-- E 滑块 -->
+
+<!-- S 摘要 & Video-->
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this paper, we introduce <span class="dcontrolvideo">PoseCrafter</span>, a one-shot method for personalized video generation following the control of flexible poses. Built upon Stable Diffusion and ControlNet, we carefully design an inference process to produce high-quality videos without the corresponding ground-truth frames. First, we select an appropriate reference frame from the training video and invert it to initialize all latent variables for generation. Then, we insert the corresponding training pose into the target pose sequences to enhance faithfulness through a trained temporal attention module. Furthermore, to alleviate the face and hand degradation resulting from discrepancies between poses of training videos and inference poses, we implement simple latent editing through an affine transformation matrix involving facial and hand landmarks. Extensive experiments on several datasets demonstrate that PoseCrafter achieves superior results to baselines pre-trained on a vast collection of videos under 8 commonly used metrics.
+            Besides,  PoseCrafter can follow poses from different individuals or artificial edits and simultaneously retain the human identity in an open-domain training video. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Method. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-2">Method</h2>
+          <div class="custom-image">
+            <img src="./static/images/method.png" alt="Our method.">
+          </div>
+        <div class="content has-text-justified">
+          <p>
+            Built upon Stable Diffusion and ControlNet, PoseCrafter requires merely fine-tuning the pre-trained model on a single open-domain video.
+            Technically, we carefully design an inference process to produce high-quality videos following flexible pose control without the corresponding frames. First, we select an appropriate reference frame from the training video and invert it to initialize all latent variables for generation. Then, we insert the corresponding training pose into the target pose sequences to enhance faithfulness through a trained temporal attention module.  Furthermore, to alleviate the face and hand degradation resulting from discrepancies between poses of training videos and inference poses, we implement simple latent editing through an affine transformation matrix involving facial and hand landmarks. 
+            <!--<b>For fair comparisons, following previous works, we sample 8 frames from each video. We also show the edited results with 48 frames</b>.-->
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Method. -->
+
+    <!-- Paper video. -->
+    <!--
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+<!-- S DEMO -->
+<section class="hero is-light is-small">
+  <section class="section">
+    <div class="columns is-centered has-text-centered">
+      <h2 class="title is-2">Results</h2> 
+    </div>
+    <div> <span>
+      The video format is organized as follows: the first column contains training frames used for PoseCrafter training; 
+      the second column includes derived frames, from which poses will be extracted; 
+      the third column shows derived poses extracted from the derived frames; 
+      the fourth column presents frames generated by PoseCrafter, guided by the poses of the derived frames. 
+      <span class="red-word"> Please note that PoseCrafter did not train on the derived frames and we only extracted inference poses from them.</span> </span>  </div>
+      <div class="divider"></div>
+    <!-- HED-1 -->
+    <div class="container demo">
+      <h2 class="title is-3">Inference with Poses from the Same Individual</h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="main-video" controls height="100%" >
+              <source src="./static/video/1.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=8, M=100</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="HEDgirl3style" sync="main-video" controls height="100%">
+              <source src="./static/video/3.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    <!-- HED-2-->
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="HEDgirl7golden" sync="main-video" controls height="100%">
+              <source src="./static/video/4.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="HEDgirl7night" sync="main-video" controls height="100%">
+              <source src="./static/video/5.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    <!-- HED-3-->
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="HEDcar10red" sync="main-video" controls height="100%">
+              <source src="./static/video/12.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="HEDcat4black" sync="main-video" controls height="100%">
+              <source src="./static/video/11.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    <!-- HED-4-->
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="HEDswancrystal" sync="main-video" controls height="100%">
+              <source src="./static/video/6.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100 (+ red hair and beard)</span>
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Canny-1 -->
+      <h2 class="title is-3">Inference with Artificially Designed Poses</h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="cannycar11red" sync="main-video" controls height="100%" >
+              <source src="./static/video/7.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=8</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="cannycar11autumn" sync="main-video" controls height="100%">
+              <source src="./static/video/8.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=8</span>
+
+            </p>
+          </div>
+        </div>
+      </div>
+    <!-- Canny-2-->
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="cannygirl8red" sync="main-video" controls height="100%">
+              <source src="./static/video/9.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=16</span>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="divider"></div>
+
+      <!-- Depth-1 -->
+      <h2 class="title is-3">Inference with Poses from Different individuals</h2>
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="depthback1sun" sync="main-video" controls height="100%" >
+              <source src="./static/video/10.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=50, M=50</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="depthback1style" sync="main-video" controls height="100%">
+              <source src="./static/video/16.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=50, M=50</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    <!-- Depth-2-->
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="item">
+            <video id="depthcake" sync="main-video" controls height="100%">
+              <source src="./static/video/13.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="item">
+            <video id="depthcar" sync="main-video" controls height="100%">
+              <source src="./static/video/14.mp4"
+                      type="video/mp4">
+            </video>
+            <p class="demo-caption">
+              <span class="red-word">N=100, M=100</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+          <!-- Depth-2-->
+          <div class="columns is-centered">
+            <div class="column">
+              <div class="item">
+                <video id="depthcake" sync="main-video" controls height="100%">
+                  <source src="./static/video/15.mp4"
+                          type="video/mp4">
+                </video>
+                <p class="demo-caption">
+                  <span class="red-word">N=100, M=100</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+      <div class="divider"></div>
+
+     
+      <!-- 一行多个模块并列 -->
+      <!--
+      <div class="columns is-centered">
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">Visual Effects</h2>
+            <p>
+              Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
+              would be impossible without nerfies since it would require going through a wall.
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/dollyzoom-stacked.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3">Visual Effects</h2>
+            <p>
+              Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
+              would be impossible without nerfies since it would require going through a wall.
+            </p>
+            <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/dollyzoom-stacked.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+
+        <div class="column">
+          <h2 class="title is-3">Matting</h2>
+          <div class="columns is-centered">
+            <div class="column content">
+              <p>
+                As a byproduct of our method, we can also solve the matting problem by ignoring
+                samples that fall outside of a bounding box during rendering.
+              </p>
+              <video id="matting-video" controls playsinline height="100%">
+                <source src="./static/videos/matting.mp4"
+                        type="video/mp4">
+              </video>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      -->
+
+
+      <!-- 一行单个模块 -->
+      <!-- Animation. -->
+      <!--
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Animation</h2>
+
+          <h3 class="title is-4">Interpolating states</h3>
+          <div class="content has-text-justified">
+            <p>
+              We can also animate the scene by interpolating the deformation latent codes of two input
+              frames. Use the slider here to linearly interpolate between the left frame and the right
+              frame.
+            </p>
+          </div>
+          <div class="columns is-vcentered interpolation-panel">
+            <div class="column is-3 has-text-centered">
+              <img src="./static/images/interpolate_start.jpg"
+                   class="interpolation-image"
+                   alt="Interpolate start reference image."/>
+              <p>Start Frame</p>
+            </div>
+            <div class="column interpolation-video-column">
+              <div id="interpolation-image-wrapper">
+                Loading...
+              </div>
+              <input class="slider is-fullwidth is-large is-info"
+                     id="interpolation-slider"
+                     step="1" min="0" max="100" value="0" type="range">
+            </div>
+            <div class="column is-3 has-text-centered">
+              <img src="./static/images/interpolate_end.jpg"
+                   class="interpolation-image"
+                   alt="Interpolation end reference image."/>
+              <p class="is-bold">End Frame</p>
+            </div>
+          </div>
+          <br/>
+
+          <h3 class="title is-4">Re-rendering the input video</h3>
+          <div class="content has-text-justified">
+            <p>
+              Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
+              viewpoint such as a stabilized camera by playing back the training deformations.
+            </p>
+          </div>
+          <div class="content has-text-centered">
+            <video id="replay-video"
+                   controls
+                   muted
+                   preload
+                   playsinline
+                   width="75%">
+              <source src="./static/videos/replay.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      -->
+    </div>
+  </section>
+</section>
+
+<!-- S Comparsions -->
+<section class="section">
+  <!-- HED-1 -->
+  <div class="container demo">
+    <h2 class="title is-3">Comparsions</h2>
+  <!-- HED-1-->
+  <div class="columns is-centered">
+    <div class="column is-full-width">
+      <div class="content">
+       <div class="bottom-text-container">
+          <div class="bottom-text-group">
+            <span>Ground Truth</span>
+          </div>
+          <div class="bottom-text-group">
+            <span><b>PoseCrafter <br>(N=8)</b></span>
+          </div>
+          <div class="bottom-text-group">
+            <span>Disco</span>
+          </div>
+          <div class="bottom-text-group">
+            <span>Fine-tuned <br> Disco</span>
+          </div>
+          <div class="bottom-text-group">
+            <span>MagicAnimate</span>
+          </div>
+          <div class="bottom-text-group">
+            <span>ControlVideo</span>
+          </div>
+          <div class="bottom-text-group">
+            <span>GEN-2</span>
+          </div>
+        </div>
+        <video id="comparestyle" controls height="100%" >
+          <source src="./static/video/ted.mp4"
+                  type="video/mp4">
+        </video>
+        <!-- <p class="baseline-caption">
+          <span class="red-word">+ Krenz Cushart style</span>
+        </p> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- HED-2-->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="content">
+         <div class="bottom-text-container">
+            <div class="bottom-text-group">
+              <span>Ground Truth</span>
+            </div>
+            <div class="bottom-text-group">
+              <span><b>PoseCrafter <br>(N=32)</b></span>
+            </div>
+            <div class="bottom-text-group">
+              <span><b>PoseCrafter <br>(N=8)</b></span>
+            </div>
+            <div class="bottom-text-group">
+              <span>Disco</span>
+            </div>
+            <div class="bottom-text-group">
+              <span>Fine-tuned <br> Disco</span>
+            </div>
+            <div class="bottom-text-group">
+              <span>MagicAnimate</span>
+            </div>
+            <div class="bottom-text-group">
+              <span>GEN-2</span>
+            </div>
+          </div>
+          <video id="comparestyle" controls height="100%" >
+            <source src="./static/video/tiktok.mp4"
+                    type="video/mp4">
+          </video>
+          <!-- <p class="baseline-caption">
+            <span class="red-word">+ Krenz Cushart style</span>
+          </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Concurrent Work. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There are a lot of excellent works that are related to PoseCrafter.
+          </p>
+          <p>
+            <a href="https://github.com/CompVis/latent-diffusion">High-resolution image synthesis with latent diffusion models</a>
+          </p>
+          <p>
+            <a href="https://github.com/lllyasviel/ControlNet">Adding Conditional Control to Text-to-Image Diffusion Models</a>
+          </p>
+          <p>
+            <a href="https://github.com/thu-ml/controlvideo">ControlVideo: Adding Conditional Control for One Shot Text-to-Video Editing</a>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Concurrent Work. -->
+
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@misc{zhong2024posecrafter,
+      title={PoseCrafter: One-Shot Personalized Video Synthesis Following Flexible Poses}, 
+      author={Yong Zhong and Min Zhao and Zebin You and Xiaofeng Yu and Changwang Zhang and Chongxuan Li},
+      year={2024},
+      eprint={2405.14582},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+</code></pre>
+  </div>
+</section>
+
+
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <!--
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          -->
+          <p>
+            This website is constructed using the source code provided by <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, and we are grateful for their template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+<!-- E body 网页主体 -->
+
+</html>
